@@ -1,4 +1,4 @@
-package com.example.internship.ui.theme.registration
+package com.example.internship.ui.registration
 
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
@@ -29,7 +29,8 @@ class PersonalDataViewModel @Inject constructor(
     var status by mutableStateOf("")
     var contact by mutableStateOf("")
     var photo by mutableStateOf("")
-
+    var aboutUser by mutableStateOf("")
+    var experience by mutableStateOf("")
     fun onNameChanged(newText: String) {
         name = newText
     }
@@ -77,7 +78,9 @@ class PersonalDataViewModel @Inject constructor(
                 contact = contact,
                 status = status,
                 password = password,
-                email = email
+                email = email,
+                aboutUser = aboutUser,
+                experience = experience
             )
             viewModelScope.launch(Dispatchers.IO) {
                 dataStoreRepository.setPref(status, userStatus)

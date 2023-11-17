@@ -12,5 +12,7 @@ data class BaseInfo(
     val email: String,
     val password: String,
     val status: String,
-    val contact: String
+    val contact: String,
+    val aboutUser: String,
+    val experience: String
 )
