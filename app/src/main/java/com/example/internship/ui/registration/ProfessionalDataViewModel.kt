@@ -36,8 +36,7 @@ class ProfessionalDataViewModel @Inject constructor(
     var age by mutableStateOf(0)
     var sex by mutableStateOf("")
 
-    // Company
-    var organization by mutableStateOf("")
+
 
     fun onSpecialityChanged(newText: String) {
         speciality = newText
@@ -51,9 +50,7 @@ class ProfessionalDataViewModel @Inject constructor(
         sex = newText
     }
 
-    fun onOrganizationChanged(newText: String) {
-        organization = newText
-    }
+
 
     fun sendUserData() {
         if (status == "STUDENT") {
