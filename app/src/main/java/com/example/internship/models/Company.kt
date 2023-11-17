@@ -7,5 +7,9 @@ data class Company(
     val organization: String,
     val archiveVacancies: MutableList<String> = mutableListOf<String>(),
     val activeVacancies: MutableList<String> = mutableListOf<String>(),
-    val baseInfo: BaseInfo
+    val baseInfo: BaseInfo,
+    var rating: Double = 0.0,
+    val projects: MutableList<String> = mutableListOf()
 )
+
+

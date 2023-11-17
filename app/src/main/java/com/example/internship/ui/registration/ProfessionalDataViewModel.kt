@@ -1,4 +1,4 @@
-package com.example.internship.ui.theme.registration
+package com.example.internship.ui.registration
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

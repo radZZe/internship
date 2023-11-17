@@ -1,4 +1,4 @@
-package com.example.internship.ui.theme.registration
+package com.example.internship.ui.registration
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.keyframes
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.internship.ui.theme.ButtonColour
 import com.example.internship.ui.theme.MainFont
-import com.example.internship.ui.theme.registration.Constants.LIMIT_WINDOW_HEIGHT
+import com.example.internship.util.Constants.LIMIT_WINDOW_HEIGHT
 
 @Composable
 fun CategorySelectionRegistrationScreen(
