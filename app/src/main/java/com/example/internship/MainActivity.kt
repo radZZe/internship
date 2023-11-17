@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.internship.graphs.RootNavGraph
 import com.example.internship.ui.theme.InternshipTheme
-import com.example.internship.ui.theme.internship_catalog.InternshipCatalog
+import com.example.internship.ui.internship_catalog.InternshipCatalog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
