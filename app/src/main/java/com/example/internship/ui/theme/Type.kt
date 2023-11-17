@@ -2,9 +2,11 @@ package com.example.internship.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.internship.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -31,4 +33,10 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+
+val MainFont = FontFamily(
+    Font(R.font.weisenhoff_regular),
+    Font(R.font.weissenhof_bold, weight = FontWeight.Bold),
+    Font(R.font.weissenhof_medium, weight = FontWeight.Medium)
 )
