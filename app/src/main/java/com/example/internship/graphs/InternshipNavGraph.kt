@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.internship.ui.profiles.profiel_intern.ProfileIntern
 import com.example.internship.ui.theme.internship_card.InternshipCard
 import com.example.internship.ui.theme.internship_catalog.InternshipCatalog
 import com.example.internship.util.Graphs
@@ -12,7 +13,7 @@ import com.example.internship.util.Screens
 
 fun NavGraphBuilder.internshipNavGraph (navController: NavController){
     navigation(
-        startDestination = Screens.InternshipCatalog.route,
+        startDestination = Screens.ProfileIntern.route,
         route = Graphs.Internship.route
     ){
         composable(Screens.InternshipCatalog.route){
@@ -25,6 +26,9 @@ fun NavGraphBuilder.internshipNavGraph (navController: NavController){
 
         composable("${Screens.InternshipCard.route}/{internshipId}"){backStack->
             InternshipCard(internshipId = backStack.arguments?.getString("internshipId")?:"")
+        }
+        composable(Screens.ProfileIntern.route){backStack->
+            ProfileIntern()
         }
     }
 }

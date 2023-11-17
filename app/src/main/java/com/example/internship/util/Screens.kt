@@ -5,4 +5,5 @@ sealed class Screens(
 ){
     object InternshipCatalog:Screens(route = "internship_catalog")
     object InternshipCard:Screens(route = "internship_card")
+    object ProfileIntern:Screens(route = "profile_intern")
 }
