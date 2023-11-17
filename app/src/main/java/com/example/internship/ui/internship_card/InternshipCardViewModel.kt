@@ -1,4 +1,4 @@
-package com.example.internship.ui.theme.internship_card
+package com.example.internship.ui.internship_card
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,8 +26,10 @@ class InternshipCardViewModel @Inject constructor(
         100,
         InternshipType.Internship,
         InternshipStatus.Preparing,
+        null,
+        null,
         "teamlead",
-        listOf("mobile","backend","frontend")
+        specialities = listOf("mobile","backend","frontend")
     ))
     fun getCardInfo(internshipId:String){
         viewModelScope.launch (Dispatchers.IO) {

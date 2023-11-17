@@ -1,7 +1,8 @@
 package com.example.internship.models
 
-import android.hardware.SensorAdditionalInfo
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
+import java.util.Date
 
 @Serializable
 data class Internship(
@@ -14,10 +15,12 @@ data class Internship(
     val salary:Int? = null,
     val type:InternshipType,
     val status:InternshipStatus,
-   // val imageUrl:String
+    val startDate: Date?=null,
+    val imageUrl:String?=null,
     val teamLead:String?,
     val specialities:List<String>,
-    val additionalInfo: String?=null
+    val additionalInfo: String?=null,
+    val feedbacks:List<Feedback>? = null
 )
 
 enum class InternshipType(type:String){
@@ -28,7 +31,10 @@ enum class InternshipType(type:String){
 
 
 enum class InternshipStatus(status:String){
+    @SerializedName("in progress")
     InProgress("in progress"),
+    @SerializedName("preparing")
     Preparing("preparing"),
+    @SerializedName("archive")
     Archive("archive")
 }

@@ -1,4 +1,4 @@
-package com.example.internship.ui.theme.internship_catalog
+package com.example.internship.ui.internship_catalog
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
