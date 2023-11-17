@@ -1,5 +1,6 @@
 package com.example.internship.ui.registration
 
+import android.net.Uri
 import android.text.TextUtils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.internship.data.DataStoreRepository
 import com.example.internship.data.DataStoreRepository.PreferenceKeys.userStatus
 import com.example.internship.models.BaseInfo
+import com.example.internship.models.Company
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,11 +28,17 @@ class PersonalDataViewModel @Inject constructor(
     var password by mutableStateOf("")
     var password2 by mutableStateOf("")
     var city by mutableStateOf("")
-    var status by mutableStateOf("")
+    var status by mutableStateOf<String?>(null)
     var contact by mutableStateOf("")
-    var photo by mutableStateOf("")
+    var photo by mutableStateOf<Uri?>(null)
     var aboutUser by mutableStateOf("")
     var experience by mutableStateOf("")
+    // Company
+    var organization by mutableStateOf("")
+
+    fun onOrganizationChanged(newText: String) {
+        organization = newText
+    }
     fun onNameChanged(newText: String) {
         name = newText
     }
@@ -67,23 +75,38 @@ class PersonalDataViewModel @Inject constructor(
         contact = newText
     }
 
+    fun onAboutChanged(newText: String) {
+        aboutUser = newText
+    }
+
+    fun onExperienceChanged(newText: String) {
+        experience = newText
+    }
+    fun onPhotoChanged(newUri: Uri) {
+        photo = newUri
+    }
+
+    val statuses  = listOf("Работодатель", "Стажёр")
     fun saveUser() {
         if (isValidData()) {
             val baseInfo = BaseInfo(
                 name = name,
                 surname = surname,
                 lastName = lastname,
-                photo = photo,
+                photo = photo.toString(),
                 city = city,
                 contact = contact,
-                status = status,
+                status = status!!,
                 password = password,
                 email = email,
                 aboutUser = aboutUser,
                 experience = experience
             )
+            if (status == "Работодатель") {
+                val company = Company(baseInfo = baseInfo, organization = organization)
+            }
             viewModelScope.launch(Dispatchers.IO) {
-                dataStoreRepository.setPref(status, userStatus)
+                dataStoreRepository.setPref(status!!, userStatus)
             }
         }
     }
@@ -97,7 +120,9 @@ class PersonalDataViewModel @Inject constructor(
                         lastname.isNotBlank() &&
                         city.isNotBlank() &&
                         contact.isNotBlank() &&
-                        status.isNotBlank() &&
+                        !status.isNullOrBlank() &&
+                        experience.isNotBlank() &&
+                        aboutUser.isNotBlank() &&
                         password == password2
                 )
     }
