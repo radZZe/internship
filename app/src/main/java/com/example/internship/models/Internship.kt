@@ -17,9 +17,11 @@ data class Internship(
     val status:InternshipStatus,
     val startDate: Date?=null,
     val imageUrl:String?=null,
+    val projectGoal:String?=null,
     val teamLead:String?,
     val specialities:List<String>,
     val additionalInfo: String?=null,
+    val organizations:List<String>?=null,
     val feedbacks:List<Feedback>? = null
 )
 

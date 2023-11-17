@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.internship.data.api.InternshipApi
 import com.example.internship.models.Internship
 import com.example.internship.models.Category
+import com.example.internship.models.InternshipFilter
 import com.example.internship.models.InternshipStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,9 +24,9 @@ class InternshipCatalogViewModel @Inject constructor(
 ):ViewModel() {
     private val _internships = mutableStateListOf<Internship>()
     val internships = mutableStateOf<List<Internship>>(emptyList())
-
-
     val isLoading = mutableStateOf(false)
+
+    val filter = mutableStateOf(InternshipFilter())
 
     val categories = mutableStateListOf(
         Category(InternshipStatus.Preparing,true),
@@ -53,4 +54,6 @@ class InternshipCatalogViewModel @Inject constructor(
         categories.clear()
         categories.addAll(filtered)
     }
+
+
 }
