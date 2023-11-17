@@ -73,9 +73,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
-    implementation("androidx.navigation:navigation-compose:$2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     //Coil library for async loading image from url
     implementation("io.coil-kt:coil-compose:2.2.2")
