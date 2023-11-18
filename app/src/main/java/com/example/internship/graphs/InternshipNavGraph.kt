@@ -18,7 +18,7 @@ import com.example.internship.util.Screens
 
 fun NavGraphBuilder.internshipNavGraph (navController: NavController){
     navigation(
-        startDestination = Screens.ProfileCompany.route,
+        startDestination = Screens.ProfileIntern.route,
         route = Graphs.Internship.route
     ){
         composable(Screens.InternshipCatalog.route){
