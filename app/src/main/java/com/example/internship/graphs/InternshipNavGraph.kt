@@ -9,13 +9,16 @@ import com.example.internship.ui.registration.PersonalDataScreen
 import com.example.internship.ui.internship_card.InternshipCard
 import com.example.internship.ui.internship_catalog.InternshipCatalog
 import com.example.internship.ui.internship_catalog.filter_screen.FilterInternshipsScreen
+import com.example.internship.ui.profiles.profiel_intern.EditProfileIntern
+import com.example.internship.ui.profiles.profile_company.EditProfileCompany
+import com.example.internship.ui.profiles.profile_company.ProfileCompany
 import com.example.internship.util.Graphs
 import com.example.internship.util.Screens
 
 
 fun NavGraphBuilder.internshipNavGraph (navController: NavController){
     navigation(
-        startDestination = Screens.PersonalDataScreen.route,
+        startDestination = Screens.ProfileCompany.route,
         route = Graphs.Internship.route
     ){
         composable(Screens.InternshipCatalog.route){
@@ -44,7 +47,38 @@ fun NavGraphBuilder.internshipNavGraph (navController: NavController){
             PersonalDataScreen()
         }
         composable(Screens.ProfileIntern.route){backStack->
-            ProfileIntern()
+            ProfileIntern(
+                onBackNavigate = {
+                    navController.popBackStack()
+                },
+                onEditNavigate = {
+                    navController.navigate(Screens.ProfileEditIntern.route)
+                }
+            )
+        }
+        composable(Screens.ProfileEditIntern.route){backStack->
+            EditProfileIntern(
+                onBackNavigate = {
+                    navController.popBackStack()
+                },
+            )
+        }
+        composable(Screens.ProfileCompany.route){backStack->
+            ProfileCompany(
+                onBackNavigate = {
+                    navController.popBackStack()
+                },
+                onEditNavigate = {
+                    navController.navigate(Screens.ProfileEditCompany.route)
+                }
+            )
+        }
+        composable(Screens.ProfileEditCompany.route){backStack->
+            EditProfileCompany(
+                onBackNavigate = {
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }
