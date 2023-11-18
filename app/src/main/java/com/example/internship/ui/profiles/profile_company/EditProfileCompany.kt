@@ -19,7 +19,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,8 +42,12 @@ import coil.compose.AsyncImage
 import com.example.internship.R
 import com.example.internship.ui.profiles.profiel_intern.NavProfileHeader
 import com.example.internship.ui.profiles.profiel_intern.ProfileOutlinedTextField
+import com.example.internship.ui.registration.CustomButton
 import com.example.internship.ui.registration.MainText
+import com.example.internship.ui.theme.SecondColour
+import com.example.internship.ui.theme.TextColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileCompany(
     viewModel: EditProfileCompanyViewModel = hiltViewModel(),
@@ -124,6 +133,19 @@ fun EditProfileCompany(
                 viewModel.onNameChanged("")
             }
         )
+        ProfileOutlinedTextField(
+            label = "Организация",
+            value = viewModel.organization,
+            onValueChanged = { viewModel.onOrganizationChanged(it) },
+            paddingStart = 16.dp,
+            height = 48.dp,
+            labelFontSize = 13,
+            valueFontSize = 16,
+            trailingIcon = R.drawable.ic_close_circle,
+            onClickTrailingIcon = {
+                viewModel.onNameChanged("")
+            }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         ProfileOutlinedTextField(
             label = "Фамилия",
@@ -179,5 +201,56 @@ fun EditProfileCompany(
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "О себе")
+        TextField(
+            placeholder = {
+                MainText(
+                    text = viewModel.aboutUser,
+                    color = TextColor
+                )
+            },
+            value = viewModel.aboutUser,
+            onValueChange = { viewModel.onAboutChanged(it) },
+            maxLines = 6,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = TextColor,
+                containerColor = SecondColour,
+                cursorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Опыт")
+        TextField(
+            placeholder = {
+                MainText(
+                    text = viewModel.experience,
+                    color = TextColor
+                )
+            },
+            value = viewModel.experience,
+            onValueChange = { viewModel.onExperienceChanged(it) },
+            maxLines = 6,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = TextColor,
+                containerColor = SecondColour,
+                cursorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomButton(
+            text = "Сохранить"
+        )
     }
 }

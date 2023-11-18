@@ -24,6 +24,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,8 +45,12 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.internship.R
+import com.example.internship.ui.registration.MainText
 import com.example.internship.ui.theme.ButtonColour
+import com.example.internship.ui.theme.SecondColour
+import com.example.internship.ui.theme.TextColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileIntern(
     viewModel: ProfileInternViewModel = hiltViewModel(),
@@ -94,18 +100,21 @@ fun ProfileIntern(
         DataAboutIntern(viewModel.user.skills)
         ProfileTitle(text = "Предпочтения")
         DataAboutIntern(viewModel.user.preferences)
+        Spacer(modifier = Modifier.height(16.dp))
         ProfileTitle(text = "Активные заявки")
         if (viewModel.user.activeInternship.isNotEmpty()) {
             DataAboutIntern(viewModel.user.activeInternship)
         } else {
             Text("Пока ничего нет", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
+        Spacer(modifier = Modifier.height(16.dp))
         ProfileTitle(text = "Архивные заявки")
         if (viewModel.user.archiveInternship.isNotEmpty()) {
             DataAboutIntern(viewModel.user.archiveInternship)
         } else {
             Text("Пока ничего нет", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
+
     }
 
 
@@ -223,32 +232,7 @@ fun ProfileHeader(
 //
 //}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AboutIntern(
-    value: String,
-    onValueChanged: (String) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(text = "О себе:")
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(8))
-                .border(1.dp, Color.Black, RoundedCornerShape(8))
-                .padding(5.dp)
-        ) {
-            Text(
-                maxLines = 6,
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            )
-        }
-    }
-}
+
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -270,12 +254,12 @@ fun AboutInternItem(text: String) {
         modifier = Modifier
             .clip(RoundedCornerShape(35))
             .shadow(10.dp, RoundedCornerShape(35), true, Color.Black)
-            .background(Color.White)
+            .background(ButtonColour)
             .border(1.dp, ButtonColour, RoundedCornerShape(35))
             .padding(horizontal = 10.dp, vertical = 5.dp),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+        Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color.White)
     }
 
 }
@@ -381,7 +365,7 @@ fun ProfileTitle(text: String) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(35))
-                .background(ButtonColour)
+                .background(Color.White)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             Text(
@@ -389,7 +373,7 @@ fun ProfileTitle(text: String) {
                 text = text,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White
+                color = ButtonColour
             )
         }
     }
