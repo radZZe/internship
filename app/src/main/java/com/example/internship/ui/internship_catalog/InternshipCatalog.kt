@@ -45,13 +45,23 @@ import com.example.internship.ui.theme.ButtonColour
 fun InternshipCatalog(
     viewModel: InternshipCatalogViewModel = hiltViewModel(),
     onNavigateToCard:(internshipId:String)->Unit,
-    onNavigateToSearch:()->Unit
+   // onNavigateToSearch:()->Unit
 ) {
     LaunchedEffect(key1 = null){
         viewModel.getInternships()
     }
     val internships = viewModel.internships
-
+    if (viewModel.shodDialog.value){
+        FilterInternshipsScreen(
+            onDismiss = {
+                viewModel.shodDialog.value = false
+                        },
+            onConfirm = {
+                viewModel.filterInternships()
+                viewModel.shodDialog.value = false
+            }
+        )
+    }
     if(viewModel.isLoading.value){
         Column ( modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
@@ -68,7 +78,7 @@ fun InternshipCatalog(
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
-                   onNavigateToSearch()
+                  viewModel.shodDialog.value = true
                 }
             }
             item {
@@ -76,7 +86,7 @@ fun InternshipCatalog(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                 ){
-                    items(viewModel.categories){category->
+                    items(viewModel.categories.value){category->
                         CategoryItem(
                             text = category.title.name,
                             isChecked = category.isSelected

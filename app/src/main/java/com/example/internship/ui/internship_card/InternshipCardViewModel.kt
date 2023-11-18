@@ -20,7 +20,7 @@ class InternshipCardViewModel @Inject constructor(
         "test",
         "name",
         "dec",
-        "dur",
+        20,
         "dep",
         5,
         100,

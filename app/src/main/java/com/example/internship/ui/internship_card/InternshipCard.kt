@@ -72,37 +72,44 @@ fun InternshipCard(
             MainText(
                 text = internship.value.name,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = "Продолжительность",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
-                text = internship.value.duration,
+                text = internship.value.duration.toString(),
+                color = Color.Black,
                 fontSize = 20.sp,
             )
             MainText(
                 text = "Необходимое количество участников",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.peopleCnt.toString(),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Описание",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.description,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
 
-
+//todo добавить набираемые специальности
         }
         else if (internship.value.type.name==InternshipType.Project.name){
         /*
@@ -115,25 +122,30 @@ fun InternshipCard(
             MainText(
                 text = "\"${internship.value.name}\"",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = "Цель проекта",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.projectGoal!!,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Продолжительность",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
-                text = internship.value.duration,
-                fontSize = 20.sp
+                text = internship.value.duration.toString(),
+                fontSize = 20.sp,
+                color = Color.Black
             )
         }
         else if (internship.value.type.name==InternshipType.Task.name){
@@ -147,83 +159,80 @@ fun InternshipCard(
             MainText(
                 text = "Описание задачи:",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.name,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Продолжительность",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
-                text = internship.value.duration,
+                text = internship.value.duration.toString(),
                 fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Необходимое количество участников",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.peopleCnt.toString(),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Отдел",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             MainText(
                 text = internship.value.department.toString(),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             MainText(
                 text = "Организации",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             LazyRow {
                 items(internship.value.organizations!!){
-                    MainText(text = it)
+                    MainText(text = it,  color = Color.Black)
                     Spacer(modifier = Modifier.size(16.dp))
                 }
             }
             MainText(
                 text = "Оплата",
                 fontSize = 20.sp,
+                color = Color.Black,
                 fontWeight = FontWeight.Bold
             )
             MainText(
                 text = "${internship.value.salary} $",
+                color = Color.Black,
                 fontSize = 20.sp
             )
-
-//            Row(
-//                horizontalArrangement = Arrangement.spacedBy(8.dp),
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Image(
-//                    painter = rememberVectorPainter( Icons.Default.Person),
-//                    contentDescription = "people count image",
-//                    modifier = Modifier
-//                )
-//                MainText(
-//                    text = internship.value.peopleCnt.toString(),
-//                    color = Color.White,
-//                    fontSize = 20.sp,
-//                )
-//            }
         }
         MainText(
             text = "Дополнительная информация",
+            color = Color.Black,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
         MainText(
             text = internship.value.additionalInfo?:"Отсутсвует",
+            color = Color.Black,
             fontSize = 20.sp
         )
         Button(
