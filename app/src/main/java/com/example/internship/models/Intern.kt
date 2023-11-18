@@ -16,7 +16,7 @@ data class Intern(
 )
 
 enum class InternPosition(type: String){ // при получении данных стажера обращаться по индексу 0
-    INTERN("intern"),
+    INTERN("Стажёр"),
     INTERN_SUPPORT("intern_support"),
     MANAGER("manager"),
     ADMINISTRATOR("administrator"),
@@ -24,22 +24,22 @@ enum class InternPosition(type: String){ // при получении данны
 }
 
 enum class WorkFormat(type: String) { // при получении данных стажера обращаться по индексу 1
-    ONLINE("online"),
-    OFFLINE("offline")
+    ONLINE("Онлайн"),
+    OFFLINE("Оффлайн")
 }
 enum class Remuneration(type: String) { // при получении данных стажера обращаться по индексу 2
-    PAID("paid"),
-    UNPAID("unpaid")
+    PAID("Оплачеваемая"),
+    UNPAID("Неоплачеваемая")
 }
 enum class WorkCity(type: String) { // при получении данных стажера обращаться по индексу 3
-    INCITY("online"),
-    OTHER("other")
+    INCITY("В городе пребывания"),
+    OTHER("В другом")
 }
 enum class Duration(type: String) { // при получении данных стажера обращаться по индексу 4
-    LONG("long"),
-    SHORT("short")
+    LONG("Долгосрочная"),
+    SHORT("Краткосрочная")
 }
 enum class FollowingWork(type: String) { // при получении данных стажера обращаться по индексу 5
-    WITH("with"),
-    WITHOUT("without")
+    WITH("С последующим трудоустройством"),
+    WITHOUT("Без")
 }

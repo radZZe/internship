@@ -10,17 +10,13 @@ import com.example.internship.models.BaseInfo
 import com.example.internship.models.DropDownItem
 import com.example.internship.models.Intern
 import com.example.internship.models.InternPosition
-import com.example.internship.models.Speciality
 import com.example.internship.util.Constants
 import com.example.internship.util.internPositionMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileInternViewModel @Inject constructor() : ViewModel() {
-    val isEditMode = mutableStateOf(false)
-    val aboutMeText = mutableStateOf("")
-
+class EditProfileInternViewModel @Inject constructor() :ViewModel() {
     var name by mutableStateOf("")
     var lastname by mutableStateOf("")
     var surname by mutableStateOf("")
@@ -32,9 +28,6 @@ class ProfileInternViewModel @Inject constructor() : ViewModel() {
 
     // Company
     var organization by mutableStateOf("")
-    fun onAboutMeChanged(newText: String) {
-        aboutMeText.value = newText
-    }
 
 
     val user = Intern(
@@ -86,9 +79,6 @@ class ProfileInternViewModel @Inject constructor() : ViewModel() {
     }
     fun changeExpandedCompetencies(){
         isExpandedCompetencies.value =!isExpandedCompetencies.value
-    }
-    fun changeEditMode() {
-        isEditMode.value = !isEditMode.value
     }
 
     fun onDropDownSpecialitySelect(index: Int) {
@@ -154,6 +144,4 @@ class ProfileInternViewModel @Inject constructor() : ViewModel() {
     fun onExperienceChanged(newText: String) {
         experience = newText
     }
-
-
 }
