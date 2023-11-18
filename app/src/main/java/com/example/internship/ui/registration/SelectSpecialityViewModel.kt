@@ -25,7 +25,7 @@ class SelectSpecialityViewModel @Inject constructor(
     private var isSpecialitiesSelected by mutableStateOf(false)
 
     fun changeStateCategory(index: Int) {
-        if (selectedSpecialities.size < 3){
+        if (selectedSpecialities.size < 1){
             if(specialities[index].value.isSelected.value){
                 specialities[index].value.isSelected.value = !specialities[index].value.isSelected.value
                 selectedSpecialities.remove(specialities[index])
