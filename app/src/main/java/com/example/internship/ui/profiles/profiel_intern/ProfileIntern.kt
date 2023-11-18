@@ -1,8 +1,5 @@
 package com.example.internship.ui.profiles.profiel_intern
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -29,18 +25,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -55,12 +44,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.internship.R
 import com.example.internship.ui.theme.ButtonColour
-import com.example.internship.ui.theme.MainFont
 
 @Composable
 fun ProfileIntern(
-    viewModel: ProfileInternViewModel = hiltViewModel()
+    viewModel: ProfileInternViewModel = hiltViewModel(),
+    onBackNavigate: () -> Unit,
+    onEditNavigate: () -> Unit,
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,18 +60,17 @@ fun ProfileIntern(
                 rememberScrollState()
             ),
     ) {
-        InternProfileHeader(
-            name = viewModel.user.baseInfo.name,
-            lastName = viewModel.user.baseInfo.lastName,
-            spec = viewModel.user.speciality,
-            isEditMode = viewModel.isEditMode.value,
+        NavProfileHeader(
             onEditClick = {
-                viewModel.changeEditMode()
-            }
+                onEditNavigate()
+            },
+            onBackClick = {
+                onBackNavigate()
+            })
+        ProfileHeader(
+            firstTitle = viewModel.user.baseInfo.name + " " + viewModel.user.baseInfo.surname,
+            spec = viewModel.user.speciality,
         )
-        Row(){
-
-        }
         ProfileTitle(text = "Основные сведения")
         ProfileTextField(
             label = "О себе",
@@ -92,14 +82,6 @@ fun ProfileIntern(
                 text = if (viewModel.user.baseInfo.experience.isNotEmpty()) viewModel.user.baseInfo.experience else "-"
             )
         }
-//        ProfileOutlinedTextField(
-//            label = "О себе",
-//            value = viewModel.aboutMeText.value,
-//            onClickTrailingIcon = {},
-//            onValueChanged = {
-//                viewModel.onAboutMeChanged(it)
-//            }
-//        )
         DataAboutIntern(
             listOf(
                 viewModel.user.sex,
@@ -118,45 +100,54 @@ fun ProfileIntern(
         } else {
             Text("Пока ничего нет", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
-        ProfileTitle(text = "Архивные заявки",)
+        ProfileTitle(text = "Архивные заявки")
         if (viewModel.user.archiveInternship.isNotEmpty()) {
             DataAboutIntern(viewModel.user.archiveInternship)
         } else {
             Text("Пока ничего нет", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
     }
+
+
+}
+
+@Composable
+fun NavProfileHeader(
+    onBackClick:()->Unit,
+    onEditClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Image(
+            modifier = Modifier.clickable {
+                onBackClick()
+        },painter = painterResource(id = R.drawable.ic_back_arrow), contentDescription = null)
+        Image(
+            modifier = Modifier.clickable {
+                onEditClick()
+            },
+            painter = painterResource(id = R.drawable.ic_edit_notactive),
+            contentDescription = null
+        )
+    }
 }
 
 
 @Composable
-fun InternProfileHeader(
-    name: String,
-    lastName: String,
-    spec: String,
-    isEditMode: Boolean,
-    onEditClick: () -> Unit
+fun ProfileHeader(
+    firstTitle: String,
+    spec: String
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(40.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Image(painterResource(id = R.drawable.ic_back_arrow), contentDescription = null)
-            Image(
-                modifier = Modifier.clickable {
-                    onEditClick()
-                },
-                painter = painterResource(id = if (isEditMode) R.drawable.ic_edit_active else R.drawable.ic_edit_notactive),
-                contentDescription = null
-            )
-        }
         AsyncImage(
             modifier = Modifier
                 .width(100.dp)
@@ -165,7 +156,7 @@ fun InternProfileHeader(
             model = "https://icdn.lenta.ru/images/2022/07/14/13/20220714133344014/square_320_2144f43b9da1fd38c196a1dfc0feffe5.jpg",
             contentDescription = null,
         )
-        Text(text = "$name $lastName")
+        Text(text = "$firstTitle")
         Text(text = spec)
 //        Row(
 //            modifier = Modifier.fillMaxWidth(),
@@ -386,14 +377,20 @@ fun ProfileTextField(label: String, text: String) {
 
 @Composable
 fun ProfileTitle(text: String) {
-    Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center){
+    Row(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(35))
                 .background(ButtonColour)
                 .padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
-            Text(textAlign = TextAlign.Center,text = text, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = Color.White)
+            Text(
+                textAlign = TextAlign.Center,
+                text = text,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.White
+            )
         }
     }
 
