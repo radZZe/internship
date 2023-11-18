@@ -38,20 +38,35 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.internship.models.Internship
 import com.example.internship.models.Category
 import com.example.internship.models.InternshipStatus
+import com.example.internship.ui.registration.MainText
 import com.example.internship.ui.theme.ButtonColour
 
 @Composable
 fun InternshipCatalog(
     viewModel: InternshipCatalogViewModel = hiltViewModel(),
     onNavigateToCard:(internshipId:String)->Unit,
-    onNavigateToSearch:()->Unit
+   // onNavigateToSearch:()->Unit
 ) {
     LaunchedEffect(key1 = null){
         viewModel.getInternships()
     }
     val internships = viewModel.internships
+    if (viewModel.shodDialog.value){
+        FilterInternshipsScreen(
+            onDismiss = {
+                viewModel.shodDialog.value = false
+                        },
+            onConfirm = {
+                viewModel.filterInternships()
+                viewModel.shodDialog.value = false
+            }
+        )
+    }
     if(viewModel.isLoading.value){
-        CircularProgressIndicator(modifier = Modifier.size(10.dp))
+        Column ( modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+            CircularProgressIndicator(modifier = Modifier.size(10.dp))
+        }
     }
     else{
         LazyColumn(
@@ -63,7 +78,7 @@ fun InternshipCatalog(
                     modifier = Modifier
                         .padding(16.dp)
                 ) {
-                   onNavigateToSearch()
+                  viewModel.shodDialog.value = true
                 }
             }
             item {
@@ -71,7 +86,7 @@ fun InternshipCatalog(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                 ){
-                    items(viewModel.categories){category->
+                    items(viewModel.categories.value){category->
                         CategoryItem(
                             text = category.title.name,
                             isChecked = category.isSelected
@@ -141,7 +156,7 @@ fun InternshipItem(
                     Text(text = "20/12/2023")
                 }
             }
-            Text(text = internship.name)
+            MainText(text = internship.name)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -151,12 +166,12 @@ fun InternshipItem(
                     contentDescription = "people count image",
                     modifier = Modifier
                 )
-                Text(
+                MainText(
                     text = internship.peopleCnt.toString(),
                     color = Color.White
                 )
             }
-            Text(text = "specialities:")
+            MainText(text = "specialities:")
             LazyRow {
                 items(internship.specialities){ name->
                     Specialization(name = name)
@@ -172,7 +187,7 @@ fun InternshipItem(
                     .clip(RoundedCornerShape(20.dp))
                     .padding(8.dp)
             ) {
-                Text(text = "Откликнуться")
+                MainText(text = "Откликнуться")
             }
         }
 

@@ -20,7 +20,7 @@ class InternshipCardViewModel @Inject constructor(
         "test",
         "name",
         "dec",
-        "dur",
+        20,
         "dep",
         5,
         100,
@@ -28,6 +28,7 @@ class InternshipCardViewModel @Inject constructor(
         InternshipStatus.Preparing,
         null,
         null,
+        "goal",
         "teamlead",
         specialities = listOf("mobile","backend","frontend")
     ))

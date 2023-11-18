@@ -9,7 +9,7 @@ data class Internship(
     val id:String,
     val name:String,
     val description:String,
-    val duration:String,
+    val duration:Int,
     val department:String? = null,
     val peopleCnt:Int,
     val salary:Int? = null,
@@ -17,15 +17,20 @@ data class Internship(
     val status:InternshipStatus,
     val startDate: Date?=null,
     val imageUrl:String?=null,
+    val projectGoal:String?=null,
     val teamLead:String?,
     val specialities:List<String>,
     val additionalInfo: String?=null,
+    val organizations:List<String>?=null,
     val feedbacks:List<Feedback>? = null
 )
 
 enum class InternshipType(type:String){
+    @SerializedName("task")
     Task("task"),
+    @SerializedName("internship")
     Internship("internship"),
+    @SerializedName("project")
     Project("project")
 }
 
