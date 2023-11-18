@@ -7,6 +7,14 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +23,9 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,20 +39,29 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import com.example.internship.R
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
-import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,11 +70,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -108,7 +128,12 @@ fun PersonalDataScreen(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MainText(text = "Создайте аккаунт", fontWeight = FontWeight.Bold, fontSize = 22.sp, color = Color.Black)
+        MainText(
+            text = "Создайте аккаунт",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            color = Color.Black
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Box(modifier = Modifier
             .clickable(
@@ -232,7 +257,21 @@ fun PersonalDataScreen(
                 viewModel.onNameChanged("")
             }
         )
-        CustomRadioButton(viewModel) { viewModel.onStatusChanged(it) }
+        Spacer(modifier = Modifier.height(16.dp))
+        ProfileOutlinedTextField(
+            label = "Контакт для связи",
+            value = viewModel.password2,
+            onValueChanged = { viewModel.onContactChanged(it) },
+            paddingStart = 16.dp,
+            height = 48.dp,
+            labelFontSize = 13,
+            valueFontSize = 16,
+            trailingIcon = R.drawable.ic_close_circle,
+            onClickTrailingIcon = {
+                viewModel.onContactChanged("")
+            }
+        )
+        CustomRadioButton(viewModel.statuses, viewModel.status) { viewModel.onStatusChanged(it) }
         if (viewModel.status == "Работодатель") {
             ProfileOutlinedTextField(
                 label = "Организация",
@@ -248,22 +287,11 @@ fun PersonalDataScreen(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
+        } else if (viewModel.status == "Стажёр") {
+            InternData(viewModel = viewModel)
         }
-        ProfileOutlinedTextField(
-            label = "Контакт для связи",
-            value = viewModel.password2,
-            onValueChanged = { viewModel.onContactChanged(it) },
-            paddingStart = 16.dp,
-            height = 48.dp,
-            labelFontSize = 13,
-            valueFontSize = 16,
-            trailingIcon = R.drawable.ic_close_circle,
-            onClickTrailingIcon = {
-                viewModel.onContactChanged("")
-            }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        if (!viewModel.status.isNullOrBlank()) {
+
+        if (viewModel.status.isNotBlank()) {
             TextField(
                 placeholder = {
                     MainText(
@@ -314,7 +342,9 @@ fun PersonalDataScreen(
         CustomButton(
             modifier = Modifier,
             text = "Далее",
-            onCLick = {}
+            onCLick = {
+                viewModel.saveUser()
+            }
         )
     }
 
@@ -332,6 +362,7 @@ fun ProfileOutlinedTextField(
     onClickTrailingIcon: () -> Unit,
     labelFontSize: Int,
     valueFontSize: Int,
+    keyboardOption: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
 ) {
     val lineHeightSp: TextUnit = labelFontSize.sp
     val lineHeightDp: Dp = with(LocalDensity.current) {
@@ -387,7 +418,8 @@ fun ProfileOutlinedTextField(
                     textStyle = TextStyle(
                         fontSize = valueFontSize.sp,
                         fontFamily = MainFont
-                    )
+                    ),
+                    keyboardOptions = keyboardOption
                 )
                 if (trailingIcon != null) Image(
                     painter = painterResource(id = trailingIcon),
@@ -404,15 +436,22 @@ fun ProfileOutlinedTextField(
 
 @Composable
 fun CustomRadioButton(
-    viewModel: PersonalDataViewModel,
+//    viewModel: PersonalDataViewModel,/
+    list: List<String>,
+    jopa: String,
     stateChange: (String) -> Unit
 ) {
-    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-        viewModel.statuses.forEach { option ->
-            Row (modifier = Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
+    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+//        viewModel.statuses.forEach { option ->
+        list.forEach { option ->
+            Row(
+                modifier = Modifier.wrapContentSize(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 MainText(text = option, color = Color.Black)
                 RadioButton(
-                    selected = viewModel.status == option,
+//                    selected = viewModel.status == option,
+                    selected = jopa == option,
                     onClick = {
                         stateChange(option)
                     },
@@ -420,8 +459,287 @@ fun CustomRadioButton(
                         selectedColor = ButtonColour, unselectedColor = Color.Gray
                     )
                 )
-                Spacer(modifier = Modifier.width(20.dp))
             }
         }
+    }
+}
+
+@Composable
+fun InternData(
+    viewModel: PersonalDataViewModel
+) {
+    ProfileOutlinedTextField(
+        label = "Возраст",
+        value = viewModel.age,
+        onValueChanged = { viewModel.onAgeChanged(it) },
+        paddingStart = 16.dp,
+        height = 48.dp,
+        labelFontSize = 13,
+        valueFontSize = 16,
+        trailingIcon = R.drawable.ic_close_circle,
+        onClickTrailingIcon = {
+            viewModel.onOrganizationChanged("")
+        },
+        keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
+    Spacer(modifier = Modifier.height(16.dp))
+    MainText(text = "Укажите Вашу специальность", color = Color.Black)
+    Spacer(modifier = Modifier.height(16.dp))
+    CategoriesGrid(viewModel = viewModel)
+    Spacer(modifier = Modifier.height(16.dp))
+    MainText(text = "Выберите предпочтения к стажировке", color = Color.Black)
+    CustomRadioButton(
+        list = viewModel.workFormats,
+        jopa = viewModel.workFormat,
+        stateChange = { viewModel.onWorkFormatChanged(it) }
+    )
+    CustomRadioButton(
+        list = viewModel.remunerations,
+        jopa = viewModel.remuneration,
+        stateChange = { viewModel.onRemunerationChanged(it) }
+    )
+    CustomRadioButton(
+        list = viewModel.workCities,
+        jopa = viewModel.workCity,
+        stateChange = { viewModel.onWorkCityChanged(it) }
+    )
+    CustomRadioButton(
+        list = viewModel.durations,
+        jopa = viewModel.duration,
+        stateChange = { viewModel.onDurationChanged(it) }
+    )
+    CustomRadioButton(
+        list = viewModel.followingWorks,
+        jopa = viewModel.followingWork,
+        stateChange = { viewModel.onFollowingWorkChanged(it) }
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    DropDownPositions(viewModel)
+    Spacer(modifier = Modifier.height(16.dp))
+    MainText(text = "Укажите Ваши софт скиллы", color = Color.Black)
+    Spacer(modifier = Modifier.height(16.dp))
+    SoftSkillsGrid(viewModel = viewModel)
+    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun CategoriesGrid(
+    viewModel: PersonalDataViewModel
+) {
+    val data = viewModel.specialities
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        data.forEachIndexed { index, item ->
+            Column(modifier = Modifier.wrapContentSize()) {
+                Row(modifier = Modifier.wrapContentSize()) {
+                    CategoryItem(
+                        text = item.value.title,
+                        isChecked = item.value.isSelected.value
+                    ) {
+                        viewModel.changeStateCategory(index)
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun SoftSkillsGrid(
+    viewModel: PersonalDataViewModel
+) {
+    val data = viewModel.softSkills
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        data.forEachIndexed { index, item ->
+            Column(modifier = Modifier.wrapContentSize()) {
+                Row(modifier = Modifier.wrapContentSize()) {
+                    CategoryItem(
+                        text = item.value.title,
+                        isChecked = item.value.isSelected.value
+                    ) {
+                        viewModel.changeStateSkill(index)
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun CategoryItem(
+    text: String,
+    isChecked: Boolean = false,
+    onClick: () -> Unit?
+) {
+    AnimatedContent(
+        targetState = isChecked,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(durationMillis = 150)) with
+                    fadeOut(animationSpec = tween(durationMillis = 150)) using
+                    SizeTransform { initialSize, targetSize ->
+                        if (targetState) {
+                            keyframes {
+                                IntSize(initialSize.width, initialSize.height) at 150
+                                durationMillis = 300
+                            }
+                        } else {
+                            keyframes {
+                                IntSize(targetSize.width, targetSize.height) at 150
+                                durationMillis = 300
+                            }
+                        }
+                    }
+        },
+        modifier = Modifier.clickable(
+            interactionSource = MutableInteractionSource(),
+            indication = null
+        ) {
+            onClick()
+        }, label = ""
+    ) { state ->
+
+        val rowPadding = mutableMapOf<String, Int>()
+        rowPadding["start"] = 16
+        rowPadding["end"] = 16
+        rowPadding["top"] = 5
+        rowPadding["bottom"] = 5
+
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(25.dp))
+                .background(if (state) ButtonColour else SecondColour),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(
+                        start = rowPadding["start"]!!.dp,
+                        end = rowPadding["end"]!!.dp,
+                        top = rowPadding["top"]!!.dp,
+                        bottom = rowPadding["bottom"]!!.dp
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row() {
+                    val color = if (state) Color.White else TextColor
+                    MainText(text = text, color = color)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomButton(
+    modifier: Modifier = Modifier,
+    text: String = "Text",
+    textColor: Color = Color.White,
+    color: Color = ButtonColour,
+    onCLick: () -> Unit = {}
+) {
+    Button(
+        onClick = { onCLick() },
+        modifier = modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(50.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = color,
+            contentColor = textColor
+        ),
+
+        contentPadding = PaddingValues(vertical = 13.dp)
+    ) {
+        MainText(text = text)
+    }
+}
+
+@Composable
+fun MainText(
+    text: String,
+    fontWeight: FontWeight = FontWeight.Normal,
+    fontSize: TextUnit = 14.sp,
+    color: Color = Color.White
+) {
+    Text(
+        color = color,
+        text = text,
+        fontFamily = MainFont,
+        fontWeight = fontWeight,
+        fontSize = fontSize
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownPositions(
+    viewModel: PersonalDataViewModel
+) {
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+
+        OutlinedTextField(
+            value = viewModel.position,
+            shape = RoundedCornerShape(20.dp),
+            onValueChange = { viewModel.position = it },
+            modifier = Modifier.fillMaxWidth(),
+            readOnly = true,
+            label = {
+                MainText(
+                    text = "Выберите должность в проекте",
+                    color = ButtonColour
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    icon,
+                    "expand",
+                    modifier = Modifier
+                        .clickable { expanded = !expanded }
+                )
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                textColor = Color.Black,
+                focusedLabelColor = ButtonColour,
+                containerColor = Color.White,
+                placeholderColor = Color.Black,
+                disabledBorderColor = ButtonColour,
+                focusedBorderColor = ButtonColour,
+                unfocusedBorderColor = ButtonColour,
+                errorBorderColor = ButtonColour
+            )
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            viewModel.positions.forEach { label ->
+                DropdownMenuItem(onClick = {
+                    viewModel.position = label
+                    expanded = false
+                },
+                    text = { MainText(text = label, color = TextColor) }
+                )
+            }
+        }
+
     }
 }

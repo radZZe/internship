@@ -20,51 +20,5 @@ import javax.inject.Inject
 class ProfessionalDataViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
 ) : ViewModel() {
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            status = dataStoreRepository.getPref(userStatus).first()
-        }
-    }
 
-    var status by mutableStateOf("")
-
-    // Uni
-    var baseInfo by mutableStateOf("") // Have to be gotten from network
-
-    // Intern
-    var speciality by mutableStateOf("")
-    var age by mutableStateOf(0)
-    var sex by mutableStateOf("")
-
-
-
-    fun onSpecialityChanged(newText: String) {
-        speciality = newText
-    }
-
-    fun onAgeChanged(newText: Int) {
-        age = newText
-    }
-
-    fun onSexChanged(newText: String) {
-        sex = newText
-    }
-
-
-
-    fun sendUserData() {
-        if (status == "STUDENT") {
-//            val intern = Intern(
-//                baseInfo = baseInfo,
-//                speciality = speciality,
-//                sex = sex,
-//                age = age,
-//            )
-        } else {
-//            val company = Company(
-//                baseInfo = baseInfo,
-//                organization = organization
-//            )
-        }
-    }
 }
