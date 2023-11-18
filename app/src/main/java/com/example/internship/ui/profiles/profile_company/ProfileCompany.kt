@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +38,7 @@ fun ProfileCompany(
     viewModel: ProfileCompanyViewModel = hiltViewModel(),
     onBackNavigate: () -> Unit,
     onEditNavigate: () -> Unit,
-){
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +59,7 @@ fun ProfileCompany(
             spec = viewModel.user.organization,
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Row(modifier = Modifier.fillMaxWidth()){
+        Row(modifier = Modifier.fillMaxWidth()) {
             RatingBar(
                 rate = viewModel.user.rating,
                 enabled = false,
@@ -101,16 +102,20 @@ fun ProfileCompany(
 
 @Composable
 fun RatingBar(
-    rate:Double = 0.0,
+    rate: Double = 0.0,
     enabled: Boolean,
     numberOfSelectedStarsDefault: Int = 0,
-    starSize: Int = 40,
+    starSize: Int = 20,
     onClick: (rate: Int) -> Unit,
 ) {
     val numberOfStars = 5;
     val numberOfSelectedStars = remember { mutableStateOf(numberOfSelectedStarsDefault) }
-    Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-        Text(text = rate.toString(),fontSize = 16.sp, fontWeight = FontWeight.Medium)
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = rate.toString(), fontSize = 20.sp, fontWeight = FontWeight.Medium)
         for (i in 1..rate.toInt()) {
             Image(
                 painter = painterResource(id = R.drawable.star_selected),

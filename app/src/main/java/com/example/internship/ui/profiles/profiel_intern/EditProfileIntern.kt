@@ -21,8 +21,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,8 +43,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.internship.R
 import com.example.internship.models.DropDownItem
+import com.example.internship.ui.registration.CustomButton
+import com.example.internship.ui.registration.CustomRadioButton
 import com.example.internship.ui.registration.MainText
+import com.example.internship.ui.theme.SecondColour
+import com.example.internship.ui.theme.TextColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileIntern(
     viewModel: EditProfileInternViewModel = hiltViewModel(),
@@ -157,7 +166,7 @@ fun EditProfileIntern(
         ProfileOutlinedTextField(
             label = "Город",
             value = viewModel.city,
-            onValueChanged = { viewModel.onLastnameChanged(it) },
+            onValueChanged = { viewModel.onCityChanged(it) },
             paddingStart = 16.dp,
             height = 48.dp,
             labelFontSize = 13,
@@ -170,7 +179,7 @@ fun EditProfileIntern(
         ProfileOutlinedTextField(
             label = "Контакты",
             value = viewModel.contact,
-            onValueChanged = { viewModel.onLastnameChanged(it) },
+            onValueChanged = { viewModel.onContactChanged(it) },
             paddingStart = 16.dp,
             height = 48.dp,
             labelFontSize = 13,
@@ -179,6 +188,54 @@ fun EditProfileIntern(
             onClickTrailingIcon = {
                 viewModel.onNameChanged("")
             }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "О себе")
+        TextField(
+            placeholder = {
+                MainText(
+                    text = viewModel.aboutUser,
+                    color = TextColor
+                )
+            },
+            value = viewModel.aboutUser,
+            onValueChange = { viewModel.onAboutChanged(it) },
+            maxLines = 6,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = TextColor,
+                containerColor = SecondColour,
+                cursorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Опыт")
+        TextField(
+            placeholder = {
+                MainText(
+                    text = viewModel.experience,
+                    color = TextColor
+                )
+            },
+            value = viewModel.experience,
+            onValueChange = { viewModel.onExperienceChanged(it) },
+            maxLines = 6,
+            shape = RoundedCornerShape(20.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                textColor = TextColor,
+                containerColor = SecondColour,
+                cursorColor = Color.Black,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(130.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
         DropDownProfile(
@@ -203,6 +260,48 @@ fun EditProfileIntern(
             changeSate = {
                 viewModel.changeExpandedSpeciality()
             }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomRadioButton(
+            list = viewModel.workFormats,
+            jopa = viewModel.workFormat,
+            stateChange = { viewModel.onWorkFormatChanged(it) }
+        )
+        CustomRadioButton(
+            list = viewModel.remunerations,
+            jopa = viewModel.remuneration,
+            stateChange = { viewModel.onRemunerationChanged(it) }
+        )
+        CustomRadioButton(
+            list = viewModel.workCities,
+            jopa = viewModel.workCity,
+            stateChange = { viewModel.onWorkCityChanged(it) }
+        )
+        CustomRadioButton(
+            list = viewModel.durations,
+            jopa = viewModel.duration,
+            stateChange = { viewModel.onDurationChanged(it) }
+        )
+        CustomRadioButton(
+            list = viewModel.followingWorks,
+            jopa = viewModel.followingWork,
+            stateChange = { viewModel.onFollowingWorkChanged(it) }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        DropDownProfile(
+            title = "Позиция",
+            isExpanded = viewModel.isPositionExpanded.value,
+            items = viewModel.positions,
+            onSelect = {
+                viewModel.onDropDownPositionSelect(it)
+            },
+            changeSate = {
+                viewModel.changeExpandedPosition()
+            }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        CustomButton(
+            text = "Сохранить"
         )
 
     }

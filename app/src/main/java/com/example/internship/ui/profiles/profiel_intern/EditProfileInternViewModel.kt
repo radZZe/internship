@@ -143,5 +143,57 @@ class EditProfileInternViewModel @Inject constructor() :ViewModel() {
 
     fun onExperienceChanged(newText: String) {
         experience = newText
+
+    }
+
+    val isPositionExpanded = mutableStateOf(false)
+    fun changeExpandedPosition(){
+        isPositionExpanded.value =!isPositionExpanded.value
+    }
+    var selectedPosition: Int? = null
+
+    fun onDropDownPositionSelect(index: Int) {
+        if (selectedPosition != null) {
+            positions[selectedPosition!!] =
+                positions[selectedPosition!!].copy(isSelect = !positions[selectedPosition!!].isSelect)
+        }
+        positions[index] =
+            positions[index].copy(isSelect = !positions[index].isSelect)
+        selectedPosition = index
+    }
+
+    val positions =
+        listOf("Стажёр", "Помощник стажера", "Менеджер", "Администратор", "Член проектной команды").map {
+            DropDownItem(it,false)
+        }.toMutableStateList()
+
+    val workFormats = listOf("Онлайн", "Оффлайн")
+    var workFormat by mutableStateOf<String>("")
+    fun onWorkFormatChanged(newText: String) {
+        workFormat = newText
+    }
+
+    val remunerations = listOf("Оплачиваемая", "Неоплачиваемая")
+    var remuneration by mutableStateOf<String>("")
+    fun onRemunerationChanged(newText: String) {
+        remuneration = newText
+    }
+
+    val workCities = listOf("Город пребывания", "Другой")
+    var workCity by mutableStateOf<String>("")
+    fun onWorkCityChanged(newText: String) {
+        workCity = newText
+    }
+
+    val durations = listOf("Продолжительная", "Краткосрочная")
+    var duration by mutableStateOf<String>("")
+    fun onDurationChanged(newText: String) {
+        duration = newText
+    }
+
+    val followingWorks = listOf("С последующим трудоустройством", "Без")
+    var followingWork by mutableStateOf<String>("")
+    fun onFollowingWorkChanged(newText: String) {
+        followingWork = newText
     }
 }
